@@ -10,6 +10,8 @@ from Products.ATContentTypes.content import schemata
 from Products.ATExtensions.widget.url import UrlWidget
 from Products.ATExtensions.widget.email import EmailWidget
 
+from Products.ATBackRef import backref 
+
 from iwlearn.contacts import contactsMessageFactory as _
 from iwlearn.contacts.interfaces import IContactOrganization
 from iwlearn.contacts.config import PROJECTNAME
@@ -114,15 +116,15 @@ ContactOrganizationSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         validators=('isTidyHtmlWithCleanup'),
     ),
 
-    atapi.ReferenceField(
+    backref.BackReferenceField(
         'contactpersons',
-        widget=atapi.ReferenceWidget(
+        widget=backref.BackReferenceBrowserWidget(
             label=_(u"Members"),
             description=_(u"Persons in this organization"),
         ),
-        relationship='contactorganization_contactpersons',
-        allowed_types=(), # specify portal type names here ('Example Type',)
-        multiValued=False,
+        relationship='contactperson_organization',
+        allowed_types=('ContactPerson',), # specify portal type names here ('Example Type',)
+        multiValued=True,
     ),
 
 ))

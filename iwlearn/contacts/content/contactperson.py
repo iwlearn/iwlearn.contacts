@@ -10,6 +10,7 @@ from Products.ATContentTypes.content import schemata
 from Products.ATExtensions.widget.url import UrlWidget
 from Products.ATExtensions.widget.email import EmailWidget
 
+from Products.ATBackRef import backref 
 
 from iwlearn.contacts import contactsMessageFactory as _
 from iwlearn.contacts.interfaces import IContactPerson
@@ -22,7 +23,7 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     atapi.ComputedField(
         'title',
         searchable=True,
-        accessor='Title'
+        accessor='Title',
         widget=atapi.ComputedWidget(
             label=_(u"Name"),
             description=_(u"Full name"),
@@ -51,7 +52,6 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             label=_(u"First name"),
             description=_(u"First and middle name(s)"),
         ),
-        required=True,
     ),
 
 
@@ -117,8 +117,8 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
 
     atapi.LinesField(
-        'country'
-        searchable=True,,
+        'country',
+        searchable=True,
         widget=atapi.LinesWidget(
             label=_(u"Country"),
             description=_(u"Country"),
@@ -133,7 +133,7 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             description=_(u"The persons organization of employment"),
         ),
         relationship='contactperson_organization',
-        allowed_types=(), # specify portal type names here ('Example Type',)
+        allowed_types=('ContactOrganization',), # specify portal type names here ('Example Type',)
         multiValued=False,
     ),
 
@@ -214,17 +214,27 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     ),
 
 
-    atapi.ReferenceField(
+    backref.BackReferenceField(
         'projects',
-        widget=atapi.ReferenceWidget(
+        widget=backref.BackReferenceBrowserWidget(
             label=_(u"Projects"),
             description=_(u"Projects of this person"),
         ),
         relationship='persons_project_contacts',
-        allowed_types=(), # specify portal type names here ('Example Type',)
-        multiValued=False,
+        allowed_types=('Project',), # specify portal type names here ('Example Type',)
+        multiValued=True,
     ),
 
+    backref.BackReferenceField(
+        'groups',
+        widget=backref.BackReferenceBrowserWidget(
+            label=_(u"Groups"),
+            description=_(u"Groups of this person"),
+        ),
+        relationship='contactgroup_persons',
+        allowed_types=('ContactGroup',), # specify portal type names here ('Example Type',)
+        multiValued=True,
+    ),
 
 ))
 
@@ -241,8 +251,8 @@ class ContactPerson(base.ATCTContent):
 
     def _computeTitle(self):
         """Get object's title."""
-        return self.getSalutation + ' ' +\
-                self.getFirstname + ' ' + self.getLastname
+        return self.getSalutation() + ' ' +\
+                self.getFirstname() + ' ' + self.getLastname()
 
 
 atapi.registerType(ContactPerson, PROJECTNAME)
