@@ -1,0 +1,50 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="iwlearn.contacts">
+
+  <!-- configure your content components here -->
+  
+  <!-- -*- extra stuff goes here -*- -->
+  <class class=".contactperson.ContactPerson">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.IContactPerson"
+        />
+    <require
+        permission="cmf.ModifyPortalContent"
+        set_schema="..interfaces.IContactPerson"
+        />
+  </class>
+  <class class=".contactorganization.ContactOrganization">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.IContactOrganization"
+        />
+    <require
+        permission="cmf.ModifyPortalContent"
+        set_schema="..interfaces.IContactOrganization"
+        />
+  </class>
+  <class class=".contactgroup.ContactGroup">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.IContactGroup"
+        />
+    <require
+        permission="cmf.ModifyPortalContent"
+        set_schema="..interfaces.IContactGroup"
+        />
+  </class>
+  <class class=".contactdb.ContactDb">
+    <require
+        permission="zope2.View"
+        interface="..interfaces.IContactDb"
+        />
+    <require
+        permission="cmf.ModifyPortalContent"
+        set_schema="..interfaces.IContactDb"
+        />
+  </class>
+
+</configure>
