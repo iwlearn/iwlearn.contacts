@@ -11,10 +11,13 @@ from Products.ATExtensions.widget.url import UrlWidget
 from Products.ATExtensions.widget.email import EmailWidget
 
 from Products.ATBackRef import backref 
+from archetypes.referencebrowserwidget.widget import ReferenceBrowserWidget
+
 
 from iwlearn.contacts import contactsMessageFactory as _
 from iwlearn.contacts.interfaces import IContactPerson
 from iwlearn.contacts.config import PROJECTNAME
+from iwlearn.contacts import vocabulary
 
 ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
@@ -30,6 +33,19 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             
         ),
         expression = 'context._computeTitle()',
+    ),
+
+
+    atapi.ComputedField(
+        'description',
+        searchable=True,
+        accessor='Description',
+        widget=atapi.ComputedWidget(
+            label=_(u"Description"),
+            description=_(u"Used in item listings and search results."),
+            
+        ),
+        expression = 'context._computeDescription()',
     ),
 
 
@@ -68,7 +84,7 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
     atapi.StringField(
         'jobtitle',
-        searchable=True,
+        searchable=False,
         widget=atapi.StringWidget(
             label=_(u"Job title"),
             description=_(u"Job title"),
@@ -119,7 +135,8 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     atapi.LinesField(
         'country',
         searchable=True,
-        widget=atapi.LinesWidget(
+        vocabulary = vocabulary.get_countries(),
+        widget=atapi.SelectionWidget(
             label=_(u"Country"),
             description=_(u"Country"),
         ),
@@ -128,19 +145,25 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
     atapi.ReferenceField(
         'organization',
-        widget=atapi.ReferenceWidget(
+        widget=ReferenceBrowserWidget(
             label=_(u"Organization"),
             description=_(u"The persons organization of employment"),
+            allow_search =True,
+            allow_sorting = True,
+            allow_browse =True,
+            hide_inaccessible=True,
+            show_review_state=True,
+            history_length=3,
         ),
         relationship='contactperson_organization',
-        allowed_types=('ContactOrganization',), # specify portal type names here ('Example Type',)
+        allowed_types=('ContactOrganization','mxmContactsOrganization'), # specify portal type names here ('Example Type',)
         multiValued=False,
     ),
 
 
     atapi.StringField(
         'department',
-        searchable=True,
+        searchable=False,
         widget=atapi.StringWidget(
             label=_(u"Department"),
             description=_(u"The organization department"),
@@ -219,9 +242,16 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         widget=backref.BackReferenceBrowserWidget(
             label=_(u"Projects"),
             description=_(u"Projects of this person"),
+            allow_search =True,
+            allow_sorting = True,
+            allow_browse =True,
+            startup_directory_method='_getProjectsDirectory',
+            hide_inaccessible=True,
+            show_review_state=True,
+            history_length=3,            
         ),
         relationship='persons_project_contacts',
-        allowed_types=('Project',), # specify portal type names here ('Example Type',)
+        allowed_types=('Project','IWProject'), # specify portal type names here ('Example Type',)
         multiValued=True,
     ),
 
@@ -230,6 +260,12 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         widget=backref.BackReferenceBrowserWidget(
             label=_(u"Groups"),
             description=_(u"Groups of this person"),
+            allow_search =True,
+            allow_sorting = True,
+            allow_browse =True,
+            hide_inaccessible=True,
+            show_review_state=True,
+            history_length=3,
         ),
         relationship='contactgroup_persons',
         allowed_types=('ContactGroup',), # specify portal type names here ('Example Type',)
@@ -254,5 +290,21 @@ class ContactPerson(base.ATCTContent):
         return self.getSalutation() + ' ' +\
                 self.getFirstname() + ' ' + self.getLastname()
 
+    def _computeDescription(self):
+        """ Objects Description """
+        org = self.getOrganization()
+        if org==None:
+            org = ''
+        else:
+            org = org.Title() + ', '
+        return self.getJobtitle() + ', ' +\
+            org + self.getDepartment() 
 
+    def _getProjectsDirectory(self):
+        """ get the path projects database """
+        for brain in self.portal_catalog(
+            portal_type = 'Project Database', review_state='published'):
+            # return the first match found
+            return brain.getPath()
+        
 atapi.registerType(ContactPerson, PROJECTNAME)

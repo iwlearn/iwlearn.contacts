@@ -15,6 +15,7 @@ from Products.ATBackRef import backref
 from iwlearn.contacts import contactsMessageFactory as _
 from iwlearn.contacts.interfaces import IContactOrganization
 from iwlearn.contacts.config import PROJECTNAME
+from iwlearn.contacts import vocabulary
 
 ContactOrganizationSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
@@ -60,7 +61,8 @@ ContactOrganizationSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
     atapi.LinesField(
         'country',
-        widget=atapi.LinesWidget(
+        vocabulary = vocabulary.get_countries(),
+        widget=atapi.SelectionWidget(
             label=_(u"Country"),
             description=_(u"Country"),
         ),
@@ -123,7 +125,7 @@ ContactOrganizationSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             description=_(u"Persons in this organization"),
         ),
         relationship='contactperson_organization',
-        allowed_types=('ContactPerson',), # specify portal type names here ('Example Type',)
+        allowed_types=('ContactPerson','mxmContactsPerson'), # specify portal type names here ('Example Type',)
         multiValued=True,
     ),
 

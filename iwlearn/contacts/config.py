@@ -10,3 +10,5 @@ ADD_PERMISSIONS = {
     'ContactGroup': 'iwlearn.contacts: Add ContactGroup',
     'ContactDb': 'iwlearn.contacts: Add ContactDb',
 }
+
+PRODUCT_DEPENDENCIES = ('ATBackRef','ATExtensions')
