@@ -10,7 +10,7 @@ from Products.ATContentTypes.content import schemata
 from Products.ATExtensions.widget.url import UrlWidget
 from Products.ATExtensions.widget.email import EmailWidget
 
-from Products.ATBackRef import backref 
+from Products.ATBackRef import backref
 
 from iwlearn.contacts import contactsMessageFactory as _
 from iwlearn.contacts.interfaces import IContactOrganization
@@ -128,6 +128,41 @@ ContactOrganizationSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         allowed_types=('ContactPerson','mxmContactsPerson'), # specify portal type names here ('Example Type',)
         multiValued=True,
     ),
+
+   backref.BackReferenceField(
+        'projectlead',
+        widget=backref.BackReferenceBrowserWidget(
+            label=_(u"Lead Implementing"),
+            description=_(u"Projects for which this organization is the lead implementing agency"),
+        ),
+        relationship='leadagency_project',
+        allowed_types=('Project',), # specify portal type names here ('Example Type',)
+        multiValued=True,
+    ),
+
+    backref.BackReferenceField(
+        'projectimplementing',
+        widget=backref.BackReferenceBrowserWidget(
+            label=_(u"Implementing"),
+            description=_(u"Projects for which this organization is an implementing agency"),
+        ),
+        relationship='other_implementing_project',
+        allowed_types=('Project',), # specify portal type names here ('Example Type',)
+        multiValued=True,
+    ),
+
+    backref.BackReferenceField(
+        'projectexecuting',
+        widget=backref.BackReferenceBrowserWidget(
+            label=_(u"Executing"),
+            description=_(u"Projects for which this organization is an executing agency"),
+        ),
+        relationship='executing_agency_project',
+        allowed_types=('Project',), # specify portal type names here ('Example Type',)
+        multiValued=True,
+    ),
+
+
 
 ))
 
