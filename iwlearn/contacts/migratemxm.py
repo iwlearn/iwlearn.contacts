@@ -202,7 +202,7 @@ def migrate_organization(old, old_parent, new_parent, f):
 
 def migrate(self):
     print 'starting migration'
-    f = open('update_uids.py', 'w')
+    f = open('update_contact_uids.py', 'w')
     f.write('def migrate(self):\n')
     f.write('    print "start setting uids"\n')
     f.write('    uid_tool = self.reference_catalog\n')
