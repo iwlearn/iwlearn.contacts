@@ -92,18 +92,27 @@ def update_countries(countries):
     return cl
 
 
+def uniquelist(seq):
+    # order preserving
+    seen={}
+    result = []
+    for item in seq:
+        if item in seen.keys(): continue
+        seen[item] = 1
+        result.append(item)
+    return result
 
 def migrate_metadata(old, new, old_parent, new_parent):
-    new.update(creation_date=old.creation_date)
-    if old.effective_date:
-        new.setEffectiveDate(old.effective_date)
+    new.setCreationDate(old.CreationDate())
+    if old.getEffectiveDate():
+        new.setEffectiveDate(old.getEffectiveDate())
     else:
-        new.setEffectiveDate(old.creation_date)
+        new.setEffectiveDate(old.CreationDate())
     new.setCreators(old.Creators())
-    new.setModificationDate(old.creation_date)
+    new.setModificationDate(old.ModificationDate())
     new.setSubject(old.Subject())
     uid = old.UID()
-    old._uncatalogUID(new_parent)
+    old._uncatalogUID(old_parent)
     new._setUID(uid)
 
 
@@ -115,7 +124,7 @@ def migrate_group(old, old_parent, new_parent,f):
     portal_types = old_parent.portal_types
     portal_types.constructContent('ContactGroup', new_parent, obj_id, None)
     new = new_parent[obj_id]
-    new.update(title=old.title, description=obj.description )
+    new.update(title=old.Title(), description=old.Description() )
     new.SetBody(old.getText())
     migrate_metadata(old, new, old_parent, new_parent)
     old_parent.manage_delObjects(ids=[obj_id])
@@ -129,7 +138,7 @@ def migrate_person(old, old_parent, new_parent, f):
     portal_types = old_parent.portal_types
     portal_types.constructContent('ContactPerson', new_parent, obj_id)
     new = new_parent[obj_id]
-    new.setSalutation(old.title )
+    new.setSalutation(old.Title())
     new.setFirstname(old.getFirstname() )
     new.setLastname(old.getLastname())
     new.setJobtitle(old.getJobtitle())
@@ -137,7 +146,12 @@ def migrate_person(old, old_parent, new_parent, f):
     new.setCity(old.getCity())
     new.setZipcode(old.getPo())
     new.setMisc(old.getMisc())
-    new.setCountry(update_countries[old.getCountry(),]))
+    countries = update_countries([old.getCountry(),])
+    if countries:
+        country = countries[0]
+    else:
+        country =''
+    new.setCountry(countries)
     #reference
     new.setOrganization(old.getRawOrganization())
     new.setDepartment(old.getDepartment())
@@ -147,11 +161,11 @@ def migrate_person(old, old_parent, new_parent, f):
     new.setMobile(old.getMobile_phone())
     new.setFax(old.getFax())
     new.setBody(old.getBody())
+    new.setLocation(old.getCity() + ', ' + country)
     #backreference
-    new.setProjects(old.getBRefs('Rel1'))
+    new.setProjects(uniquelist(old.getBRefs('Rel1')))
     #backreference
-    new.setLocation(old.getRawCity() + ', ' + old.getRawCountry())
-    new.setRelatedItems([])
+    #new.setRelatedItems([])
     print old.UID()
     f.write('    #person \n')
     f.write('    obj=uid_tool.lookupObject("' + old.UID() + '")\n')
@@ -175,28 +189,32 @@ def migrate_organization(old, old_parent, new_parent, f):
     portal_types = old_parent.portal_types
     portal_types.constructContent('ContactOrganization', new_parent, obj_id)
     new = new_parent[obj_id]
-    new.update(title=old.title)
+    new.update(title=old.Title())
     new.setAddress(old.getRawAddress())
     new.setCity(old.getRawCity())
     new.setMisc(old.getRawMisc())
     new.setZipcode(old.getRawPo())
-    new.setCountry(update_countries[old.getRawCountry(),]))
+    countries = update_countries([old.getCountry(),])
+    if countries:
+        country = countries[0]
+    else:
+        country =''
+    new.setCountry(countries)
     new.setEmail(old.getRawEmail())
     new.setRemote_url(old.getRawWeb())
     new.setPhone(old.getRawPhone())
     new.setFax(old.getRawFax())
     new.setBody(old.getRawBody())
-    new.setLocation(old.getRawCity() + ', ' + old.getRawCountry())
+    new.setLocation(old.getRawCity() + ', ' + country)
     #backreference
-    new.setContactpersons(old.getBRefs())
-    new.setRelatedItems([])
+    new.setContactpersons(uniquelist(old.getBRefs('mxmContacts_employed_at')))
+    #new.setRelatedItems([])
     f.write('    #organization \n')
     f.write('    obj=uid_tool.lookupObject("' + old.UID() + '")\n')
     f.write('    obj.setContactpersons([')
     for person in new.getRawContactpersons():
         f.write(' "' + person + '",')
     f.write('])\n')
-    print old.UID()
     migrate_metadata(old, new, old_parent, new_parent)
     old_parent.manage_delObjects(ids=[obj_id])
 
@@ -220,7 +238,7 @@ def migrate(self):
         print 'created contact db: ', obj_id
         new = parent[obj_id]
         new.update(title=obj.title, description=obj.description )
-        migrate_metadata(obj, new, parent, parent)
+        #migrate_metadata(obj, new, parent, parent)
         for child in obj.objectValues():
             if child.portal_type == 'mxmContactsGroup':
                 migrate_group(child, obj, new, f)
@@ -236,3 +254,4 @@ def migrate(self):
     print "migration step 1 finished"
     print "copy the generated script update_uids.py to your extensions folder"
     print "and execute it as an external method"
+    return 'success'
