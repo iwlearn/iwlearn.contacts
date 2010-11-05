@@ -12,6 +12,8 @@
 #   Function Name: migrate
 # execute the script with the test tab.
 
+from plone.i18n.locales.countries import _countrylist
+
 COUNTRY_MAP = {
  u"africa": None,
  u"america": None,
