@@ -209,7 +209,10 @@ def migrate_organization(old, old_parent, new_parent, f):
     new.setFax(old.getRawFax())
     new.setBody(old.getRawBody())
     city = old.getRawCity().decode('UTF8','ignore').encode('UTF8')
-    new.setLocation(city + u', ' + country)
+    try:
+        new.setLocation(city + u', ' + country)
+    except:
+        pass
     #backreference
     new.setContactpersons(uniquelist(old.getBRefs('mxmContacts_employed_at')))
     #new.setRelatedItems([])
