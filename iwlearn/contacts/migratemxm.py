@@ -89,7 +89,7 @@ def update_countries(countries):
     cl = []
     if countries:
         for country in countries:
-            c = COUNTRY_MAP[country.lower()]
+            c = COUNTRY_MAP.get(country.lower(), None)
             if c:
                 cl.append(c)
     return cl
