@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # migrate mxmContacts to iwlearn.contacts
 # 1) copy this script into the parts/clientX/Extension folder
 # add an external method in the zmi in the plone root
