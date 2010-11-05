@@ -164,7 +164,10 @@ def migrate_person(old, old_parent, new_parent, f):
     new.setMobile(old.getMobile_phone())
     new.setFax(old.getFax())
     new.setBody(old.getBody())
-    new.setLocation(old.getCity() + ', ' + country)
+    try:
+        new.setLocation(old.getCity() + ', ' + country)
+    except:
+        pass
     #backreference
     new.setProjects(uniquelist(old.getBRefs('Rel1')))
     #backreference
