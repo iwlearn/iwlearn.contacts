@@ -118,6 +118,11 @@ def migrate_metadata(old, new, old_parent, new_parent):
     old._uncatalogUID(old_parent)
     new._setUID(uid)
 
+def bref_ids(backrefs):
+    result =[]
+    for backref in backrefs:
+        result.append(backref.UID())
+    return result
 
 def migrate_group(old, old_parent, new_parent,f):
     if callable(old.id):
@@ -169,7 +174,7 @@ def migrate_person(old, old_parent, new_parent, f):
     except:
         pass
     #backreference
-    new.setProjects(uniquelist(old.getBRefs('Rel1')))
+    new.setProjects(uniquelist(bref_ids(old.getBRefs('Rel1'))))
     #backreference
     #new.setRelatedItems([])
     print old.UID()
@@ -217,7 +222,8 @@ def migrate_organization(old, old_parent, new_parent, f):
     except:
         pass
     #backreference
-    new.setContactpersons(uniquelist(old.getBRefs('mxmContacts_employed_at')))
+    new.setContactpersons(uniquelist(bref_ids(
+        old.getBRefs('mxmContacts_employed_at'))))
     #new.setRelatedItems([])
     f.write('    #organization \n')
     f.write('    obj=uid_tool.lookupObject("' + old.UID() + '")\n')
