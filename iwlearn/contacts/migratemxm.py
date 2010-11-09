@@ -146,7 +146,7 @@ def migrate_person(old, old_parent, new_parent, f):
     portal_types = old_parent.portal_types
     portal_types.constructContent('ContactPerson', new_parent, obj_id)
     new = new_parent[obj_id]
-    new.setSalutation(old.Title())
+    new.setSalutation(old.title)
     new.setFirstname(old.getFirstname() )
     new.setLastname(old.getLastname())
     new.setJobtitle(old.getJobtitle())
