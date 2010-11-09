@@ -7,4 +7,14 @@
 
   <!-- -*- extra stuff goes here -*- -->
 
+  <browser:page
+      for="..interfaces.contactdb.IContactDb"
+      name="view"
+      class=".contactdbview.ContactDBView"
+      template="contactdbview.pt"
+      allowed_interface=".contactdbview.IContactDBView"
+      permission="zope.Public"
+      />
+
+
 </configure>

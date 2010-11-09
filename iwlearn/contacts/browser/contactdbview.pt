@@ -1,0 +1,145 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="iwlearn.contacts">
+<body>
+  <metal:content-core fill-slot="content-core">
+    <metal:content-core define-macro="content-core">
+
+        <div class="documentDescription" i18n:translate="search_description">
+        Search for contact information.
+        </div>
+
+        <form action="." method="get" name="search" tal:attributes="action here/absolute_url">
+
+            <fieldset>
+
+                <legend i18n:translate="legend_search_terms">Search Terms</legend>
+
+                <div class="field">
+                    <label for="SearchableText" i18n:translate="label_search_text">Search text</label>
+
+                    <div class="formHelp" i18n:translate="help_search_text">
+                    Enter a search string here.
+                    </div>
+
+                    <input type="text"
+                           id="SearchableText"
+                           name="SearchableText"
+                           size="25"
+                           tal:attributes="value view/search_term"
+                           />
+                </div>
+
+
+                <div class="field">
+
+                    <label for="Title" i18n:translate="label_limit_types">Limit types</label>
+
+                    <div class="formHelp" i18n:translate="help_limit_types">
+                    Search for specific contacttypes.
+                    </div>
+
+                  <tal:block repeat="portal_type view/getContactTypes">
+
+                    <input type="checkbox"
+                           name="portal_type:list"
+                           size="25"
+                           value="portal_type"
+                           checked ='checked'
+                           tal:attributes="value portal_type/ctype;
+                                        checked portal_type/checked"
+                           /> <span i18n:translate="" tal:content="portal_type/name"/>
+
+                  </tal:block>
+
+                   <input type="hidden" name="portal_type:list:default" value="">
+
+                </div>
+
+                <div class="formControls">
+                    <input class="context"
+                           type="submit"
+                           name="submit"
+                           value="Search"
+                           i18n:attributes="value"
+                           />
+                </div>
+
+
+            </fieldset>
+
+        </form>
+        <tal:search tal:define="search_results view/search_results" tal:condition="search_results">
+          <div tal:define="results search_results/results;
+                         Batch python:modules['Products.CMFPlone'].Batch;
+                         b_size search_results/size;
+                         b_start search_results/start;
+                         searchterm view/search_term">
+
+            <h2 i18n:translate="heading_search_results">Search results</h2>
+
+            <div tal:condition="not: results">
+                <p><strong i18n:translate="description_no_results_found">No results were found.</strong></p>
+            </div>
+
+            <div tal:condition="results"
+                  tal:define="batch python:Batch(results, b_size, int(b_start), orphan=1);">
+
+                <p>
+                <strong>
+                <span i18n:translate="batch_x_items_matching_your_criteria"><span i18n:name="number" tal:content="python:len(results)">234</span> items matching your criteria.</span>
+                </strong>
+
+                <!--a href="" tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}">
+                <img i18n:attributes="title alt"
+                     tal:attributes="src string:$portal_url/rss.gif"
+                     src="rss.gif"
+                     alt="RSS Feed"
+                     title="RSS feed of these search results" />
+                </a-->
+                </p>
+
+                <!-- Search results -->
+
+                <dl>
+                <tal:results repeat="result batch">
+                <tal:entry define="result_url result/getURL;
+                                   url string:$result_url/view?searchterm=${searchterm};">
+                    <dt>
+                <a href="#"
+                        tal:attributes="href url">
+                        <img src="#"
+                             height="16"
+                             width="16"
+                             alt=""
+                             tal:on-error="structure python:path('here/linkOpaque.gif')"
+                             tal:replace="structure python:path('here/%s' % result.getIcon)" /></a>&nbsp;<a
+                        href="#" tal:attributes="href url"
+                        tal:content="python:result.Title or result.getId" />
+                       <!--span class="discreet"
+                             title="Type"
+                             i18n:translate="label_cotact_type"
+                             i18n:attributes="title">
+                            [<span i18n:translate="" tal:content="result/portal_type"/>]
+                       </span-->
+                    </dt>
+
+                    <dd tal:content="result/Description"> Description </dd>
+
+                </tal:entry>
+                </tal:results>
+                </dl>
+
+                <!-- Navigation -->
+                <div metal:use-macro="here/batch_macros/macros/navigation" />
+
+            </div>
+          </div>
+        </tal:search>
+
+
+     </metal:content-core>
+  </metal:content-core>
+</body>
+</html>
