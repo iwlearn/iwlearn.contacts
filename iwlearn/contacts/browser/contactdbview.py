@@ -74,7 +74,7 @@ class ContactDBView(BrowserView):
         is_search = len(form)!=0
         if not is_search:
             return None
-        catalog = self.context.portal_catalog
+        catalog = self.portal_catalog
         ctype = form.get('portal_type', None)
         batch_size = form.get('b_size', 20)
         batch_start = form.get('b_start', 0)
