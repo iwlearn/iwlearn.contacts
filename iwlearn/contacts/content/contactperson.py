@@ -10,7 +10,7 @@ from Products.ATContentTypes.content import schemata
 from Products.ATExtensions.widget.url import UrlWidget
 from Products.ATExtensions.widget.email import EmailWidget
 
-from Products.ATBackRef import backref 
+from Products.ATBackRef import backref
 from archetypes.referencebrowserwidget.widget import ReferenceBrowserWidget
 
 
@@ -30,7 +30,8 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         widget=atapi.ComputedWidget(
             label=_(u"Name"),
             description=_(u"Full name"),
-            
+            visible={'edit': 'invisible', 'view': 'invisible'},
+
         ),
         expression = 'context._computeTitle()',
     ),
@@ -43,7 +44,7 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         widget=atapi.ComputedWidget(
             label=_(u"Description"),
             description=_(u"Used in item listings and search results."),
-            
+            visible={'edit': 'invisible', 'view': 'invisible'},
         ),
         expression = 'context._computeDescription()',
     ),
@@ -248,7 +249,7 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             startup_directory_method='_getProjectsDirectory',
             hide_inaccessible=True,
             show_review_state=True,
-            history_length=3,            
+            history_length=3,
         ),
         relationship='persons_project_contacts',
         allowed_types=('Project','IWProject'), # specify portal type names here ('Example Type',)
@@ -298,7 +299,7 @@ class ContactPerson(base.ATCTContent):
         else:
             org = org.Title() + ', '
         return self.getJobtitle() + ', ' +\
-            org + self.getDepartment() 
+            org + self.getDepartment()
 
     def _getProjectsDirectory(self):
         """ get the path projects database """
@@ -306,5 +307,5 @@ class ContactPerson(base.ATCTContent):
             portal_type = 'Project Database', review_state='published'):
             # return the first match found
             return brain.getPath()
-        
+
 atapi.registerType(ContactPerson, PROJECTNAME)
