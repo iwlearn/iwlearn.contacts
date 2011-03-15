@@ -28,6 +28,8 @@ ContactGroupSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             description=_(u"Body text"),
         ),
         validators=('isTidyHtmlWithCleanup'),
+        default_content_type="text/html",
+        default_output_type='text/x-html-safe',
     ),
 
     atapi.StringField(
@@ -47,6 +49,7 @@ ContactGroupSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             description=_(u"Web address of the groups activities"),
         ),
         validators=('isURL'),
+        accessor='getRemoteUrl',
     ),
 
     atapi.ReferenceField(

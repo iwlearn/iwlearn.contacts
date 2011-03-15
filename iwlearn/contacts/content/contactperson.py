@@ -191,6 +191,7 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             description=_(u"Website Address"),
         ),
         validators=('isURL'),
+        accessor='getRemoteUrl',
     ),
 
 
@@ -235,6 +236,8 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             description=_(u"Body text"),
         ),
         validators=('isTidyHtmlWithCleanup'),
+        default_content_type="text/html",
+        default_output_type='text/x-html-safe',
     ),
 
 

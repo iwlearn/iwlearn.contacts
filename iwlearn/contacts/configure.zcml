@@ -12,7 +12,7 @@
   <include package=".content" />
   <include package=".portlets" />
   <i18n:registerTranslations directory="locales" />
-  
+
   <!-- Register the installation GenericSetup extension profile -->
   <genericsetup:registerProfile
       name="default"
@@ -21,7 +21,24 @@
       description="a simple replacement for mxm contacts"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
-  
+
+  <!-- Register the import step -->
+  <genericsetup:importStep
+      name="iwlearn.contacts"
+      title="iwlearn.contacts special import handlers"
+      description=""
+      handler="iwlearn.project.setuphandlers.setupVarious" />
+
+  <!-- Register the upgrade step -->
+  <genericsetup:upgradeStep
+      title="reindex contacts"
+      description=""
+      source="1"
+      destination="2"
+      handler="iwlearn.contacts.setuphandlers.reindex_contacts"
+      profile="iwlearn.contacts:default" />
+
+
   <!-- -*- extra stuff goes here -*- -->
 
 </configure>

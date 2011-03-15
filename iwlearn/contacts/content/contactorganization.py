@@ -86,6 +86,7 @@ ContactOrganizationSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             description=_(u"Web address"),
         ),
         validators=('isURL'),
+        accessor='getRemoteUrl',
     ),
 
 
@@ -111,11 +112,14 @@ ContactOrganizationSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
     atapi.TextField(
         'body',
+        searchable=True,
         widget=atapi.RichWidget(
             label=_(u"Body Text"),
             description=_(u"The body text of the document"),
         ),
         validators=('isTidyHtmlWithCleanup'),
+        default_content_type="text/html",
+        default_output_type='text/x-html-safe',
     ),
 
     backref.BackReferenceField(
