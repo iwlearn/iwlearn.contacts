@@ -1,34 +1,28 @@
 <?xml version="1.0"?>
-<object name="ContactDb"
+<object name="MailTo"
    meta_type="Factory-based Type Information with dynamic views"
    i18n:domain="iwlearn.contacts" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
-  <property name="title" i18n:translate="">ContactDb</property>
+  <property name="title" i18n:translate="">MailTo</property>
   <property name="description"
-    i18n:translate="">Contact Database</property>
-  <property name="content_meta_type">ContactDb</property>
-  <property name="content_icon">folder_icon.gif</property>
+    i18n:translate="">Mail to a group of persons</property>
+  <property name="content_meta_type">MailTo</property>
+  <property name="content_icon">document_icon.gif</property>
   <property name="product">iwlearn.contacts</property>
-  <property name="factory">addContactDb</property>
+  <property name="factory">addMailTo</property>
   <property name="immediate_view">atct_edit</property>
-  <property name="global_allow">True</property>
-  <property name="filter_content_types">True</property>
-  <property name="allowed_content_types">
-    <element value="ContactGroup" />
-    <element value="ContactOrganization" />
-    <element value="ContactPerson" />
-    <element value="MailTo" />
-  </property>
+  <property name="global_allow">False</property>
+  <property name="filter_content_types">False</property>
   <property name="allow_discussion">False</property>
-  <property name="default_view">view</property>
+  <property name="default_view">base_view</property>
   <property name="view_methods">
-    <element value="view" />
+    <element value="base_view" />
   </property>
   <alias from="(Default)" to="(dynamic view)" />
   <alias from="edit" to="atct_edit" />
   <alias from="sharing" to="@@sharing" />
   <alias from="view" to="(selected layout)" />
   <action title="View" action_id="view" category="object" condition_expr=""
-    url_expr="string:${folder_url}/" visible="True">
+    url_expr="string:${object_url}/" visible="True">
     <permission value="View" />
   </action>
   <action title="Edit" action_id="edit" category="object" condition_expr=""

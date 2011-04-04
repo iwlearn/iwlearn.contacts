@@ -157,7 +157,7 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             history_length=3,
         ),
         relationship='contactperson_organization',
-        allowed_types=('ContactOrganization','mxmContactsOrganization'), # specify portal type names here ('Example Type',)
+        allowed_types=('ContactOrganization',), # specify portal type names here ('Example Type',)
         multiValued=False,
     ),
 
@@ -255,7 +255,7 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             history_length=3,
         ),
         relationship='persons_project_contacts',
-        allowed_types=('Project','IWProject'), # specify portal type names here ('Example Type',)
+        allowed_types=('Project',), # specify portal type names here ('Example Type',)
         multiValued=True,
     ),
 
