@@ -4,14 +4,14 @@
       i18n:domain="iwlearn.contacts">
 <body>
     <metal:content-core fill-slot="content-core">
-         <div id="content-core" define-macro="content-core">
+         <metal:content-core define-macro="content-core">
             <dl class="portalMessage info" tal:condition="here/getSenddate">
                 <dt>Info</dt>
                 <dd>This mail has already been send.</dd>
             </dl>
             <form name="sendform"
                       action="."
-                      class="searchPage"
+                      class="send-mailto"
                       tal:attributes="action string:${here/absolute_url}/@@send_view">
                 <fieldset>
                     <legend i18n:translate="legend_send_test">Test</legend>
@@ -59,7 +59,7 @@
                            i18n:attributes="value label_send;"/>
                 </fieldset>
             </form>
-        </div>
+        </metal:content-core>
     </metal:content-core>
 </body>
 </html>
