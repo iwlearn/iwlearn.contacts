@@ -1,12 +1,18 @@
 from zope.interface import implements, Interface
 
 from Products.Five import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+
 from Products.CMFCore.utils import getToolByName
 
 from iwlearn.contacts import contactsMessageFactory as _
 from iwlearn.contacts.interfaces import IContactOrganization, IContactGroup
 
 from Products.validation.validators.BaseValidators import baseValidators
+import logging
+
+log = logging.getLogger("iwlearn.contacts")
+
 
 for v in baseValidators:
     if v.name == 'isEmail':
@@ -26,6 +32,9 @@ class SendView(BrowserView):
     Send browser view
     """
     implements(ISendView)
+    render = ViewPageTemplateFile('sendview.pt')
+    mailto = ''
+    max_mails=1
 
     def __init__(self, context, request):
         self.context = context
@@ -85,36 +94,62 @@ class SendView(BrowserView):
             rd['country'] =  recipient.getCountry()[0]
         return rd
 
-    def send_mail(self):
+    def send_mail(self, mailto=None, maxsend=None):
         """
         """
+        if mailto:
+            if not isEmail(mailto)==1:
+                putils.addPortalMessage( 'Invalid mailto address')
+                return
         template = self.context.getText()
         mFrom=self.context.getSender()
         mail_subject=self.context.Title()
         putils = getToolByName(self.context, "plone_utils")
         mail_host = getToolByName(self, 'MailHost')
+        i = 0
         for recipient in self.get_recipients():
+            if maxsend:
+                if i > maxsend:
+                    break
+            i +=1
             message = template % self.get_recipient_details(recipient)
-            if isEmail(recipient.getEmail()):
-                mTo = recipient.getEmail()
+            if mailto:
+                # send test email to mailto
+                mTo = mailto
                 mSubj = mail_subject
             else:
-                mTo = mFrom
-                mSubj = mail_subject + ' -- invalid email address'
+                if isEmail(recipient.getEmail())==1:
+                    mTo = recipient.getEmail()
+                    mSubj = mail_subject
+                else:
+                    mTo = mFrom
+                    mSubj = mail_subject + ' -- invalid email address'
             try:
                  mail_host.send(message, mTo, mFrom, mSubj)
                  #print  mTo, mFrom, mSubj, message
-            except SMTPRecipientsRefused:
+                 log.info("Send email to \"%s\"" % mTo)
+            except Exception, e:
                  # Don't disclose email address on failure
-                 raise SMTPRecipientsRefused('Recipient address rejected by server')
-
-        putils.addPortalMessage(_("The mails have been send."))
+                 log.info("Sending mail to \"%s\" failed, with error \"%s\"!" % (mTo, e))
+        putils.addPortalMessage("%d mails have been send." % i )
         return self.request.response.redirect(self.context.absolute_url())
 
 
     def __call__(self):
-        self.send_mail()
-
-        return 'done'
+        form = self.request.form
+        if form.get('test', None):
+            self.mailto = form.get('mailto_addr', None)
+            if isEmail(self.mailto)==1:
+                try:
+                    self.max_mails = abs(int(self.request.get('max_mails', '1')))
+                except ValueError:
+                    self.max_mails=1
+                return self.send_mail(self.mailto, self.max_mails)
+            else:
+                putils = getToolByName(self.context, "plone_utils")
+                putils.addPortalMessage( 'Invalid mailto address')
+        elif form.get('send', None):
+            return self.send_mail()
+        return self.render()
 
 

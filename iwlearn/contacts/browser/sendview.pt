@@ -4,8 +4,58 @@
       i18n:domain="iwlearn.contacts">
 <body>
     <metal:content-core fill-slot="content-core">
-        <metal:content-core define-macro="content-core">
-        </metal:content-core>
+         <div id="content-core" define-macro="content-core">
+            <form name="sendform"
+                      action="."
+                      class="searchPage"
+                      tal:attributes="action string:${here/absolute_url}/@@send_view">
+                <fieldset>
+                    <legend i18n:translate="legend_send_test">Test</legend>
+                    <div class="field">
+                        <label for="mailto_addr" i18n:translate="label_mailto_addr">Mail to</label>
+
+                        <div class="formHelp" i18n:translate="help_mailto_addr">
+                        Enter a test recipient here here.
+                        </div>
+
+                        <input type="text"
+                               id="mailto_addr"
+                               name="mailto_addr"
+                               size="25"
+                               tal:attributes="value view/mailto"
+                               />
+                    </div>
+                    <div class="field">
+                        <label for="max_mails" i18n:translate="label_max_mails">Number of test mails</label>
+
+                        <div class="formHelp" i18n:translate="help_max_mails">
+                        Enter how many testmails to be send to above address.
+                        Enter 0 for all.
+                        </div>
+
+                        <input type="text"
+                               id="max_mails"
+                               name="max_mails"
+                               size="25"
+                               tal:attributes="value view/max_mails"
+                               />
+                    </div>
+                    <input
+                           type="submit"
+                           value="Test"
+                           name="test"
+                           i18n:attributes="value label_test;"/>
+                </fieldset>
+                <fieldset>
+                    <legend i18n:translate="legend_send_emails">Send e-mails</legend>
+                    <input
+                           type="submit"
+                           value="send"
+                           name="send"
+                           i18n:attributes="value label_send;"/>
+                </fieldset>
+            </form>
+        </div>
     </metal:content-core>
 </body>
 </html>
