@@ -1,4 +1,5 @@
 from zope.interface import implements, Interface
+from DateTime import DateTime
 
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -101,6 +102,8 @@ class SendView(BrowserView):
             if not isEmail(mailto)==1:
                 putils.addPortalMessage( 'Invalid mailto address')
                 return
+        else:
+            self.context.setSenddate(DateTime())
         template = self.context.getText()
         mFrom=self.context.getSender()
         mail_subject=self.context.Title()

@@ -21,6 +21,17 @@ MailToSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
     # -*- Your Archetypes field definitions here ... -*-
 
+    atapi.DateTimeField(
+        'senddate',
+        widget=atapi.CalendarWidget(
+            label=_(u"Sent at"),
+            description=_(u"Date and Time this email was sent"),
+            visible={'edit': 'invisible', 'view': 'visible'},
+        ),
+        validators=('isValidDate'),
+    ),
+
+
     atapi.StringField(
         'sender',
         widget=atapi.StringWidget(

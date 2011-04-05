@@ -5,6 +5,10 @@
 <body>
     <metal:content-core fill-slot="content-core">
          <div id="content-core" define-macro="content-core">
+            <dl class="portalMessage info" tal:condition="here/getSenddate">
+                <dt>Info</dt>
+                <dd>This mail has already been send.</dd>
+            </dl>
             <form name="sendform"
                       action="."
                       class="searchPage"
@@ -46,7 +50,7 @@
                            name="test"
                            i18n:attributes="value label_test;"/>
                 </fieldset>
-                <fieldset>
+                <fieldset tal:condition="not: here/getSenddate">
                     <legend i18n:translate="legend_send_emails">Send e-mails</legend>
                     <input
                            type="submit"
