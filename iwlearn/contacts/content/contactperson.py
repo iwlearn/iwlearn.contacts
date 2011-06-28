@@ -232,7 +232,7 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         'body',
         searchable=True,
         widget=atapi.RichWidget(
-            label=_(u"Body text"),
+            label=_(u"Other information"),
             description=_(u"Body text"),
         ),
         validators=('isTidyHtmlWithCleanup'),
@@ -244,8 +244,8 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
     backref.BackReferenceField(
         'projects',
         widget=backref.BackReferenceBrowserWidget(
-            label=_(u"Projects"),
-            description=_(u"Projects of this person"),
+            label=_(u"GEF IW Project Involvement"),
+            description=_(u"Projects this person is involved in"),
             allow_search =True,
             allow_sorting = True,
             allow_browse =True,
