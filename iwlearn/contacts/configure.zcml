@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
@@ -38,10 +39,18 @@
       handler="iwlearn.contacts.setuphandlers.reindex_contacts"
       profile="iwlearn.contacts:default" />
 
+  <!-- Register the upgrade step -->
+  <genericsetup:upgradeStep
+      title="enable versioning"
+      description=""
+      source="2"
+      destination="3"
+      handler="iwlearn.contacts.setuphandlers.setVersionedTypes"
+      profile="iwlearn.contacts:default" />
 
   <!-- -*- extra stuff goes here -*- -->
 
   <include package=".browser" />
-  
+
 
 </configure>
