@@ -40,13 +40,13 @@
       profile="iwlearn.contacts:default" />
 
   <!-- Register the upgrade step -->
-  <genericsetup:upgradeStep
+  <!--genericsetup:upgradeStep
       title="enable versioning"
       description=""
       source="2"
       destination="3"
       handler="iwlearn.contacts.setuphandlers.setVersionedTypes"
-      profile="iwlearn.contacts:default" />
+      profile="iwlearn.contacts:default" /-->
 
   <!-- -*- extra stuff goes here -*- -->
 
