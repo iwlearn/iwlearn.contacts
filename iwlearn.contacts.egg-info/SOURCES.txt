@@ -197,7 +197,6 @@ iwlearn/contacts/setuphandlers.py
 iwlearn/contacts/vocabulary.py
 iwlearn/contacts/browser/__init__.py
 iwlearn/contacts/browser/configure.zcml
-iwlearn/contacts/browser/configure.zcml~
 iwlearn/contacts/browser/contactdbview.pt
 iwlearn/contacts/browser/contactdbview.py
 iwlearn/contacts/browser/sendview.pt
@@ -219,6 +218,7 @@ iwlearn/contacts/locales/en/LC_MESSAGES/README.txt
 iwlearn/contacts/portlets/__init__.py
 iwlearn/contacts/portlets/configure.zcml
 iwlearn/contacts/profiles/default/actions.xml
+iwlearn/contacts/profiles/default/diff_tool.xml
 iwlearn/contacts/profiles/default/factorytool.xml
 iwlearn/contacts/profiles/default/iwlearn.contacts_various.txt
 iwlearn/contacts/profiles/default/metadata.xml
@@ -226,7 +226,6 @@ iwlearn/contacts/profiles/default/portlets.xml
 iwlearn/contacts/profiles/default/rolemap.xml
 iwlearn/contacts/profiles/default/types.xml
 iwlearn/contacts/profiles/default/types/ContactDb.xml
-iwlearn/contacts/profiles/default/types/ContactDb.xml~
 iwlearn/contacts/profiles/default/types/ContactGroup.xml
 iwlearn/contacts/profiles/default/types/ContactOrganization.xml
 iwlearn/contacts/profiles/default/types/ContactPerson.xml

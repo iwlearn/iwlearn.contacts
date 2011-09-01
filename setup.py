@@ -56,6 +56,8 @@ setup(name='iwlearn.contacts',
       zip_safe=False,
       install_requires=['setuptools',
                         # -*- Extra requirements: -*-
+                        'Products.ATBackRef',
+                        'Products.ATExtensions',
                         ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),
