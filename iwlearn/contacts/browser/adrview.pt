@@ -1,0 +1,27 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en">
+    <title tal:content="here/Title">The title</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+<body>
+    <div  class="vcard">
+        <div class="fn org" tal:content="here/Title" >Title</div>
+        <div class="adr">
+         <div class="street-address"
+            tal:content="view/street"
+            tal:condition="view/street">665 3rd St.</div>
+         <div class="post-office-box"
+            tal:content="view/po_box"
+            tal:condition="view/po_box">P.O. Box 1234 </div>
+         <div class="extended-address"
+            tal:content="here/getMisc">Suite 207</div>
+         <span class="locality"
+            tal:content="here/getCity">San Francisco</span>,
+         <span class="postal-code"
+            tal:content="here/getZipcode">94107</span>
+         <div class="country-name"
+            tal:content="view/country">U.S.A.</div>
+        </div>
+    </div>
+
+</body>
+</html>

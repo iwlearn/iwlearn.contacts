@@ -11,8 +11,7 @@ class IContactDBView(Interface):
     ContactDB view interface
     """
 
-    def test():
-        """ test method"""
+
 
 
 class ContactDBView(BrowserView):

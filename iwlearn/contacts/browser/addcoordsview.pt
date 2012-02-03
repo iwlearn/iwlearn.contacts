@@ -1,0 +1,14 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="iwlearn.contacts">
+<body>
+    <div metal:fill-slot="main">
+        <tal:main-macro metal:define-macro="main">
+            <ul>
+            <li tal:repeat="item view/get_coords" tal:content="item">test</li>
+            </ul>
+        </tal:main-macro>
+    </div>
+</body>
+</html>
