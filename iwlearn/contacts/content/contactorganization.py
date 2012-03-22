@@ -2,6 +2,7 @@
 """
 
 from zope.interface import implements
+#from plone.app.blob.field import ImageField
 
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content import base
@@ -20,6 +21,16 @@ from iwlearn.contacts import vocabulary
 ContactOrganizationSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
     # -*- Your Archetypes field definitions here ... -*-
+
+
+    atapi.ImageField('logo_image',
+        max_size = (64,64),
+        widget=atapi.ImageWidget(label=_(u'Logo'),
+                        description=_(u'The organizations logo'),
+                    ),
+        validators=('isNonEmptyFile'),
+    ),
+
 
 
     atapi.StringField(
@@ -162,11 +173,20 @@ ContactOrganizationSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             description=_(u"Projects for which this organization is an executing agency"),
         ),
         relationship='executing_agency_project',
-        allowed_types=('Project',), # specify portal type names here ('Example Type',)
+        allowed_types=('Project',),
         multiValued=True,
     ),
 
 
+    backref.BackReferenceField(
+        'projectpartner',
+        widget=backref.BackReferenceBrowserWidget(
+            label=_(u"Partner of projects"),
+            description=_(u"Projects this organization is partnering with"),
+        ),
+        relationship='other_partner_project',
+        allowed_types=('Project',),
+    ),
 
 ))
 
