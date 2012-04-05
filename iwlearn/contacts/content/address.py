@@ -14,10 +14,17 @@ AddressSchema = atapi.Schema((
         'address',
         widget=atapi.StringWidget(
             label=_(u"Address"),
-            description=_(u"Street address or PO box"),
+            description=_(u"Street address"),
         ),
     ),
 
+    atapi.StringField(
+        'po_box',
+        widget=atapi.StringWidget(
+            label=_(u"PO box"),
+            description=_(u"PO box"),
+        ),
+    ),
 
     atapi.StringField(
         'city',
