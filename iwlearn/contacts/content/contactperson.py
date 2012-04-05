@@ -7,9 +7,6 @@ from Products.Archetypes import atapi
 from Products.ATContentTypes.content import base
 from Products.ATContentTypes.content import schemata
 
-from Products.ATExtensions.widget.url import UrlWidget
-from Products.ATExtensions.widget.email import EmailWidget
-
 from Products.ATBackRef import backref
 from archetypes.referencebrowserwidget.widget import ReferenceBrowserWidget
 
@@ -17,7 +14,7 @@ from archetypes.referencebrowserwidget.widget import ReferenceBrowserWidget
 from iwlearn.contacts import contactsMessageFactory as _
 from iwlearn.contacts.interfaces import IContactPerson
 from iwlearn.contacts.config import PROJECTNAME
-from iwlearn.contacts import vocabulary
+from iwlearn.contacts.content.address import AddressSchema
 
 ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
@@ -57,6 +54,7 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         widget=atapi.StringWidget(
             label=_(u"Title"),
             description=_(u"Salutation (Mrs., Mr.) or academical title (Dr, ...)"),
+            visible={'edit': 'visible', 'view': 'invisible'},
         ),
     ),
 
@@ -68,6 +66,7 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         widget=atapi.StringWidget(
             label=_(u"First name"),
             description=_(u"First and middle name(s)"),
+            visible={'edit': 'visible', 'view': 'invisible'},
         ),
     ),
 
@@ -79,6 +78,7 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         widget=atapi.StringWidget(
             label=_(u"Last name"),
             description=_(u"Last name"),
+            visible={'edit': 'visible', 'view': 'invisible'},
         ),
     ),
 
@@ -89,57 +89,6 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         widget=atapi.StringWidget(
             label=_(u"Job title"),
             description=_(u"Job title"),
-        ),
-    ),
-
-
-    atapi.StringField(
-        'address',
-        searchable=False,
-        widget=atapi.StringWidget(
-            label=_(u"Address"),
-            description=_(u"Street address or PO box"),
-        ),
-    ),
-
-
-    atapi.StringField(
-        'city',
-        searchable=True,
-        widget=atapi.StringWidget(
-            label=_(u"City"),
-            description=_(u"City"),
-        ),
-    ),
-
-
-    atapi.StringField(
-        'zipcode',
-        searchable=False,
-        widget=atapi.StringWidget(
-            label=_(u"Zip code"),
-            description=_(u"Postal code"),
-        ),
-    ),
-
-
-    atapi.StringField(
-        'misc',
-        searchable=False,
-        widget=atapi.StringWidget(
-            label=_(u"Extra address information"),
-            description=_(u"Extra address information"),
-        ),
-    ),
-
-
-    atapi.LinesField(
-        'country',
-        searchable=True,
-        vocabulary = vocabulary.get_countries(),
-        widget=atapi.SelectionWidget(
-            label=_(u"Country"),
-            description=_(u"Country"),
         ),
     ),
 
@@ -171,74 +120,7 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
         ),
     ),
 
-
-    atapi.StringField(
-        'email',
-        searchable=True,
-        widget=EmailWidget(
-            label=_(u"e-mail"),
-            description=_(u"e-mail address"),
-        ),
-         validators=('isEmail'),
-    ),
-
-
-    atapi.StringField(
-        'remote_url',
-        searchable=False,
-        widget=UrlWidget(
-            label=_(u"Web Address"),
-            description=_(u"Website Address"),
-        ),
-        validators=('isURL'),
-        accessor='getRemoteUrl',
-    ),
-
-
-    atapi.StringField(
-        'phone',
-        searchable=False,
-        widget=atapi.StringWidget(
-            label=_(u"Phone"),
-            description=_(u"Office phone number"),
-        ),
-        validators=('isInternationalPhoneNumber'),
-    ),
-
-
-    atapi.StringField(
-        'mobile',
-        searchable=False,
-        widget=atapi.StringWidget(
-            label=_(u"Mobile phone"),
-            description=_(u"Mobile phone number"),
-        ),
-        validators=('isInternationalPhoneNumber'),
-    ),
-
-
-    atapi.StringField(
-        'fax',
-        searchable=False,
-        widget=atapi.StringWidget(
-            label=_(u"Fax"),
-            description=_(u"Fax"),
-        ),
-        validators=('isInternationalPhoneNumber'),
-    ),
-
-
-    atapi.TextField(
-        'body',
-        searchable=True,
-        widget=atapi.RichWidget(
-            label=_(u"Other information"),
-            description=_(u"Body text"),
-        ),
-        validators=('isTidyHtmlWithCleanup'),
-        default_content_type="text/html",
-        default_output_type='text/x-html-safe',
-    ),
+)) + AddressSchema.copy() + atapi.Schema((
 
 
     backref.BackReferenceField(
