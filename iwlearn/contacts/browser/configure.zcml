@@ -9,6 +9,28 @@
   <!-- -*- extra stuff goes here -*- -->
 
   <browser:page
+      for="*"
+      name="foaf.rdf"
+      class=".foafview.FOAFPersonView"
+      template="foafperson.pt"
+      allowed_interface=".foafview.IFOAFView"
+      permission="zope2.View"
+      />
+
+
+  <browser:page
+      for="..interfaces.contactorganization.IContactOrganization"
+      name="foaf.rdf"
+      class=".foafview.FOAFOrgView"
+      template="foaforg.pt"
+      allowed_interface=".foafview.IFOAFView"
+      permission="zope2.View"
+      />
+
+
+
+
+  <browser:page
       for="..interfaces.contactdb.IContactDb"
       name="addcoords_view.html"
       class=".addcoordsview.AddCoordsView"

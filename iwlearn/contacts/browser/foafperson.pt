@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<rdf:RDF
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+      xmlns:foaf="http://xmlns.com/foaf/0.1/"
+      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:vcard="http://www.w3.org/2006/vcard/ns">
+
+    <foaf:Person rdf:ID="me" tal:attributes="rdf:ID here/UID">
+        <foaf:name tal:content="here/Title">Christian Ledermann</foaf:name>
+        <foaf:title tal:content="here/getSalutation">Mr</foaf:title>
+        <foaf:givenname tal:content="here/getFirstname">Christian</foaf:givenname>
+        <foaf:family_name tal:content="here/getLastname">Ledermann</foaf:family_name>
+        <foaf:mbox_sha1sum tal:content="view/mbox_sha1sum">d6fb2b80f5fb05b7a5f4623ac589db1fc186dfb9</foaf:mbox_sha1sum>
+        <foaf:phone rdf:resource="tel:0701131231331"
+            tal:attributes="rdf:resource string:${here/phone}"/>
+        <vcard:adr tal:content="here/getAddress" >street</vcard:adr>
+        <vcard:post-office-box tal:content="here/getPo_box">PO Box</vcard:post-office-box>
+        <vcard:extended-address tal:content="here/getMisc">suite 222 </vcard:extended-address>
+        <vcard:locality tal:content="here/getCity">San Francisco</vcard:locality>
+        <vcard:postal-code tal:content="here/getZipcode">12345</vcard:postal-code>
+        <vcard:country-name tal:content="view/country">USA</vcard:country-name>
+
+        <foaf:Organization rdf:resource="http://org.org/foaf.rdf"
+            tal:attributes="rdf:resource view/get_organization" />
+        <foaf:workplaceHomepage rdf:resource="http://iwlearn.net"
+            tal:attributes="rdf:resource here/remote_url"/>
+        <foaf:workInfoHomepage rdf:resource="Consultant"
+            tal:attributes="rdf:resource here/getJobtitle" />
+        <tal:loop tal:repeat="project view/get_projects">
+            <foaf:Project rdf:resource="http://org.org/project/@@rdf"
+                tal:attributes="rdf:resource project"/>
+        </tal:loop>
+    </foaf:Person>
+</rdf:RDF>
