@@ -4,10 +4,11 @@
       xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
       xmlns:foaf="http://xmlns.com/foaf/0.1/"
       xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+      xmlns:org="http://www.w3.org/ns/org#"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
-      xmlns:vcard="http://www.w3.org/2006/vcard/ns">
+      xmlns:vcard="http://www.w3.org/2006/vcard/ns#">
 
-    <foaf:Person rdf:ID="me" tal:attributes="rdf:ID here/UID">
+    <foaf:Person rdf:ID="me" tal:attributes="rdf:ID string:urn-${here/UID}">
         <foaf:name tal:content="here/Title">Christian Ledermann</foaf:name>
         <foaf:title tal:content="here/getSalutation">Mr</foaf:title>
         <foaf:givenname tal:content="here/getFirstname">Christian</foaf:givenname>
@@ -21,16 +22,23 @@
         <vcard:locality tal:content="here/getCity">San Francisco</vcard:locality>
         <vcard:postal-code tal:content="here/getZipcode">12345</vcard:postal-code>
         <vcard:country-name tal:content="view/country">USA</vcard:country-name>
-
-        <foaf:Organization rdf:resource="http://org.org/foaf.rdf"
-            tal:attributes="rdf:resource view/get_organization" />
+        <org:memberOf>
+            <foaf:Organization rdf:about="http://org.org/foaf.rdf"
+                tal:attributes="rdf:about view/get_organization" />
+        </org:memberOf>
         <foaf:workplaceHomepage rdf:resource="http://iwlearn.net"
             tal:attributes="rdf:resource here/remote_url"/>
         <foaf:workInfoHomepage rdf:resource="Consultant"
             tal:attributes="rdf:resource here/getJobtitle" />
         <tal:loop tal:repeat="project view/get_projects">
-            <foaf:Project rdf:resource="http://org.org/project/@@rdf"
-                tal:attributes="rdf:resource project"/>
+            <foaf:currentProject tal:condition="project/current">
+                <foaf:Project rdf:about="http://org.org/project/@@rdf"
+                    tal:attributes="rdf:about project/url"/>
+            </foaf:currentProject>
+            <foaf:pastProject tal:condition="project/past">
+                <foaf:Project rdf:about="http://org.org/project/@@rdf"
+                        tal:attributes="rdf:about project/url"/>
+            </foaf:pastProject>
         </tal:loop>
     </foaf:Person>
 </rdf:RDF>

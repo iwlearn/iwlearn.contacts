@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<rdf:RDF
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+      xmlns:foaf="http://xmlns.com/foaf/0.1/"
+      xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+      xmlns:org="http://www.w3.org/ns/org#"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:vcard="http://www.w3.org/2006/vcard/ns#">
+
+    <tal:orgs tal:repeat="org view/get_organizations">
+      <foaf:Organization rdf:ID="me" tal:attributes="rdf:ID string:urn-${org/UID}"
+        tal:define="orgobj org/getObject">
+        <foaf:name tal:content="org/Title">UNEP</foaf:name>
+        <rdfs:seeAlso rdf:resource="http://rdfweb.org/orgs/unep/rdfweb/danbri-foaf.rdf"
+            tal:attributes="rdf:resource string:${org/getURL}/@@foaf.rdf"/>
+        <tal:loop tal:repeat="pobj orgobj/getContactpersons">
+            <foaf:member rdf:nodeID="martin"
+                tal:attributes="rdf:nodeID string:urn-${pobj/UID}"/>
+        </tal:loop>
+      </foaf:Organization>
+    </tal:orgs>
+    <tal:persons tal:repeat="person view/get_persons">
+        <foaf:Person rdf:ID="me" tal:attributes="rdf:ID string:urn-${person/UID}">
+        <foaf:name tal:content="person/Title">Christian Ledermann</foaf:name>
+        <rdfs:seeAlso rdf:resource="http://rdfweb.org/people/danbri/rdfweb/danbri-foaf.rdf"
+            tal:attributes="rdf:resource string:${person/getURL}/@@foaf.rdf"/>
+        </foaf:Person>
+    </tal:persons>
+
+</rdf:RDF>

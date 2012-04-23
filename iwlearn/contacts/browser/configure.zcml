@@ -9,7 +9,7 @@
   <!-- -*- extra stuff goes here -*- -->
 
   <browser:page
-      for="*"
+      for="..interfaces.contactperson.IContactPerson"
       name="foaf.rdf"
       class=".foafview.FOAFPersonView"
       template="foafperson.pt"
@@ -27,8 +27,14 @@
       permission="zope2.View"
       />
 
-
-
+  <browser:page
+      for="..interfaces.contactdb.IContactDb"
+      name="foaf.rdf"
+      class=".foafview.FOAFDbView"
+      template="foafdb.pt"
+      allowed_interface=".foafview.IFOAFView"
+      permission="zope2.View"
+      />
 
   <browser:page
       for="..interfaces.contactdb.IContactDb"

@@ -1,4 +1,5 @@
 import hashlib
+import DateTime
 from zope.interface import implements, Interface
 
 from Products.Five import BrowserView
@@ -53,8 +54,16 @@ class FOAFPersonView(FOAFView):
 
     def get_projects(self):
         projects = self.context.getProjects()
-        for project in projects:
-            yield project.absolute_url() + '/@@rdf'
+        for p in projects:
+            project = {'url': p.absolute_url() + '/@@rdf',
+                        'current' : True,
+                        'past': False}
+            if p.getEnd_date():
+                if p.getEnd_date() < DateTime.DateTime():
+                    project = {'url': p.absolute_url() + '/@@rdf',
+                        'current' : False,
+                        'past': True}
+            yield project
 
     def get_organization(self):
         org = self.context.getOrganization()
@@ -94,5 +103,18 @@ class FOAFOrgView(FOAFView):
                 return '<geo:Point geo:lat="%f" geo:long="%f"/>' % (
                     geom[1][1], geom[1][0])
 
-        import ipdb; ipdb.set_trace()
+
+class FOAFDbView(FOAFView):
+    """
+    Organizations and persons in a single foaf.rdf file
+    """
+
+    def get_persons(self):
+        results = self.portal_catalog(portal_type='ContactPerson')
+        return results
+
+    def get_organizations(self):
+        results = self.portal_catalog(portal_type='ContactOrganization')
+        return results
+
 
