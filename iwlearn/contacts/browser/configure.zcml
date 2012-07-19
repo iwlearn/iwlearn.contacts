@@ -8,6 +8,16 @@
 
   <!-- -*- extra stuff goes here -*- -->
 
+  <!-- FOAF -->
+
+  <browser:viewlet
+       name="iwlearn.contacts.foaf.link"
+       for="..interfaces.contactperson.IContactPerson"
+       manager="plone.app.layout.viewlets.interfaces.IHtmlHeadLinks"
+       template="foaflink.pt"
+       permission="zope.Public"
+       />
+
   <browser:page
       for="..interfaces.contactperson.IContactPerson"
       name="foaf.rdf"
@@ -17,6 +27,13 @@
       permission="zope2.View"
       />
 
+  <browser:viewlet
+       name="iwlearn.contacts.foaf.link"
+       for="..interfaces.contactorganization.IContactOrganization"
+       manager="plone.app.layout.viewlets.interfaces.IHtmlHeadLinks"
+       template="foaflink.pt"
+       permission="zope.Public"
+       />
 
   <browser:page
       for="..interfaces.contactorganization.IContactOrganization"
@@ -26,6 +43,14 @@
       allowed_interface=".foafview.IFOAFView"
       permission="zope2.View"
       />
+
+  <browser:viewlet
+       name="iwlearn.contacts.foaf.link"
+       for="..interfaces.contactdb.IContactDb"
+       manager="plone.app.layout.viewlets.interfaces.IHtmlHeadLinks"
+       template="foaflink.pt"
+       permission="zope.Public"
+       />
 
   <browser:page
       for="..interfaces.contactdb.IContactDb"

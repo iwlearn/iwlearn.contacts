@@ -1,0 +1,2 @@
+<link rel="meta" type="application/rdf+xml" title="FOAF" href="foaf.rdf"
+ tal:attributes="href string:${context/absolute_url}/@@foaf.rdf"/>
