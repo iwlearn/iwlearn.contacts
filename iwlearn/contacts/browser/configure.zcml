@@ -8,6 +8,15 @@
 
   <!-- -*- extra stuff goes here -*- -->
 
+  <browser:page
+      for="..interfaces.contactdb.IContactDb"
+      name="exportcsv_view"
+      class=".exportcsvview.ExportCSVView"
+      allowed_interface=".exportcsvview.IExportCSVView"
+      permission="zope.Public"
+      />
+
+
   <!-- FOAF -->
 
   <browser:viewlet
