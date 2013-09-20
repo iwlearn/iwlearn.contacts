@@ -10,8 +10,8 @@
 
   <browser:page
       for="..interfaces.contactdb.IContactDb"
-      name="exportcsv_view"
-      class=".exportcsvview.ExportCSVView"
+      name="export_persons_csv_view"
+      class=".exportcsvview.ExportPersonsCSVView"
       allowed_interface=".exportcsvview.IExportCSVView"
       permission="zope.Public"
       />
