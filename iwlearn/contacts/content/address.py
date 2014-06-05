@@ -109,7 +109,7 @@ AddressSchema = atapi.Schema((
         'body',
         searchable=True,
         widget=atapi.RichWidget(
-            label=_(u"Body Text"),
+            label=_(u"Additional information"),
             description=_(u"The body text of the document"),
         ),
         validators=('isTidyHtmlWithCleanup'),
