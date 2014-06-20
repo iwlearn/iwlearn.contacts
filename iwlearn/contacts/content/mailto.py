@@ -69,19 +69,22 @@ Title:                      %(salutation)s
 First name:                 %(firstname)s
 Last name:                  %(lastname)s
 Job title:                  %(jobtitle)s
-Address:                    %(address)s
-City:                       %(city)s
-Postal code:                %(zipcode)s
-Extra address information:  %(misc)s
-Country:                    %(country)s
 Organization:               %(organization)s
 Department:                 %(department)s
+Address:                    %(address)s
+P.O. Box                    %(po_box)s
+City:                       %(city)s
+Extra address information:  %(misc)s
+Postal code:                %(zipcode)s
+Country:                    %(country)s
 e-mail address:             %(email)s
 Website Address:            %(remote_url)s
 Phone:                      %(phone)s
-Mobile phone:               %(mobile)s
 Fax:                        %(fax)s
+Additional information:
+%(plaintextbody)s
 
+Link to record:             %(url)s
         """,
     ),
 
