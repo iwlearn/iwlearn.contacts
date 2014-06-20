@@ -1,5 +1,6 @@
 #
 
+from Products.CMFCore.permissions import ModifyPortalContent
 from Products.Archetypes import atapi
 
 from Products.ATExtensions.widget.url import UrlWidget
@@ -67,12 +68,22 @@ AddressSchema = atapi.Schema((
     atapi.StringField(
         'email',
         widget=EmailWidget(
-            label=_(u"e-mail"),
-            description=_(u"e-mail address"),
+            label=_(u"E-mail"),
+            description=_(u"E-mail address"),
         ),
         validators=('isEmail'),
     ),
 
+    atapi.StringField(
+        'alternate_email',
+        widget=EmailWidget(
+            label=_(u"Alternate e-mail"),
+            description=_(u"Alternate e-mail address. If several attempts to contact the person using the main e-mail failed, the alternate e-mail may be used as the next option."),
+        ),
+        read_permission=ModifyPortalContent,
+        write_permission=ModifyPortalContent,
+        validators=('isEmail'),
+    ),
 
     atapi.StringField(
         'remote_url',
