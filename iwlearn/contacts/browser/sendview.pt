@@ -7,7 +7,7 @@
          <metal:content-core define-macro="content-core">
             <dl class="portalMessage info" tal:condition="here/getSenddate">
                 <dt>Info</dt>
-                <dd>This mail has already been send.</dd>
+                <dd>This mail has already been sent.</dd>
             </dl>
             <form name="sendform"
                       action="."
