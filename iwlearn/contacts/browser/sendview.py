@@ -93,6 +93,8 @@ class SendView(BrowserView):
             rd ['organization'] = recipient.getOrganization().Title()
         if recipient.getCountry():
             rd['country'] =  recipient.getCountry()[0]
+        rd['plaintextbody'] = recipient.getBody(mimetype="text/plain")
+        rd['url'] = recipient.absolute_url()
         return rd
 
     def send_mail(self, mailto=None, maxsend=None):
@@ -134,7 +136,7 @@ class SendView(BrowserView):
             except Exception, e:
                  # Don't disclose email address on failure
                  log.info("Sending mail to \"%s\" failed, with error \"%s\"!" % (mTo, e))
-        putils.addPortalMessage("%d mails have been send." % i )
+        putils.addPortalMessage("%d mails have been sent." % i )
         return self.request.response.redirect(self.context.absolute_url())
 
 
