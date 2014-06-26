@@ -8,16 +8,12 @@ from Products.CMFCore.utils import getToolByName
 
 from iwlearn.contacts import contactsMessageFactory as _
 from iwlearn.contacts.interfaces import IContactOrganization, IContactGroup
+from iwlearn.contacts.content.mailto import isNamedEmail
 
-from Products.validation.validators.BaseValidators import baseValidators
 import logging
 
 log = logging.getLogger("iwlearn.contacts")
 
-
-for v in baseValidators:
-    if v.name == 'isEmail':
-        isEmail = v
 
 class ISendView(Interface):
     """
@@ -101,7 +97,7 @@ class SendView(BrowserView):
         """
         """
         if mailto:
-            if not isEmail(mailto)==1:
+            if not isNamedEmail(mailto):
                 putils.addPortalMessage( 'Invalid mailto address')
                 return
         else:
@@ -123,7 +119,7 @@ class SendView(BrowserView):
                 mTo = mailto
                 mSubj = mail_subject
             else:
-                if isEmail(recipient.getEmail())==1:
+                if isNamedEmail(recipient.getEmail()):
                     mTo = recipient.getEmail()
                     mSubj = mail_subject
                 else:
@@ -144,7 +140,7 @@ class SendView(BrowserView):
         form = self.request.form
         if form.get('test', None):
             self.mailto = form.get('mailto_addr', None)
-            if isEmail(self.mailto)==1:
+            if isNamedEmail(self.mailto):
                 try:
                     self.max_mails = abs(int(self.request.get('max_mails', '1')))
                 except ValueError:
