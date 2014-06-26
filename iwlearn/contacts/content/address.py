@@ -9,6 +9,7 @@ from Products.ATExtensions.widget.email import EmailWidget
 from iwlearn.contacts import vocabulary
 from iwlearn.contacts import contactsMessageFactory as _
 
+
 AddressSchema = atapi.Schema((
 
     atapi.StringField(
@@ -35,7 +36,6 @@ AddressSchema = atapi.Schema((
         ),
     ),
 
-
     atapi.StringField(
         'misc',
         widget=atapi.StringWidget(
@@ -43,7 +43,6 @@ AddressSchema = atapi.Schema((
             description=_(u"Extra address information"),
         ),
     ),
-
 
     atapi.StringField(
         'zipcode',
@@ -53,8 +52,6 @@ AddressSchema = atapi.Schema((
         ),
     ),
 
-
-
     atapi.LinesField(
         'country',
         vocabulary = vocabulary.get_countries(),
@@ -63,7 +60,6 @@ AddressSchema = atapi.Schema((
             description=_(u"Country"),
         ),
     ),
-
 
     atapi.StringField(
         'email',
@@ -95,7 +91,6 @@ AddressSchema = atapi.Schema((
         accessor='getRemoteUrl',
     ),
 
-
     atapi.StringField(
         'phone',
         widget=atapi.StringWidget(
@@ -123,6 +118,21 @@ AddressSchema = atapi.Schema((
             label=_(u"Additional information"),
             description=_(u"The body text of the document"),
         ),
+        validators=('isTidyHtmlWithCleanup'),
+        default_content_type="text/html",
+        default_output_type='text/x-html-safe',
+    ),
+
+    atapi.TextField(
+        'alternate_contact_details',
+        # We don't want searches to match private details
+        # searchable=True,
+        widget=atapi.RichWidget(
+            label=_(u"Alternate contact details"),
+            description=_(u"Additional instructions regarding contact details or preferences."),
+        ),
+        read_permission=ModifyPortalContent,
+        write_permission=ModifyPortalContent,
         validators=('isTidyHtmlWithCleanup'),
         default_content_type="text/html",
         default_output_type='text/x-html-safe',
