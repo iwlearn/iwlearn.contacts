@@ -16,6 +16,38 @@ from iwlearn.contacts.interfaces import IMailTo
 from iwlearn.contacts.config import PROJECTNAME
 
 
+from zope.interface import implements
+from Products.validation.interfaces.IValidator import IValidator
+from Products.validation.validators.BaseValidators import baseValidators
+
+for v in baseValidators:
+    if v.name == 'isEmail':
+        isEmail = v
+
+
+class NamedEmailValidator:
+    implements(IValidator)
+    def __init__(self, name):
+        self.name = name
+        self.title = name
+        self.description = "Validate 'some name' <some@address>"
+
+    def __call__(self, value, *args, **kwargs):
+        email = value
+        email = email.strip()
+        if '<' in email:
+            name, email = email.split('<')
+            email = email.split('>')[0]
+            if len(name) > 80:
+                return 'Name too long'
+        valid = isEmail(email)
+        if not valid:
+            return 'Invalid email address'
+        return True
+
+isNamedEmail = NamedEmailValidator('isNamedEmail')
+
+
 
 MailToSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
@@ -39,7 +71,7 @@ MailToSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
             description=_(u"Address of sender"),
         ),
         required=True,
-        validators=('isEmail'),
+        validators=(NamedEmailValidator('isNamedEmail')),
     ),
 
 
