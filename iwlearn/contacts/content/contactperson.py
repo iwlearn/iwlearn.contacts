@@ -122,7 +122,6 @@ ContactPersonSchema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
 
 )) + AddressSchema.copy() + atapi.Schema((
 
-
     backref.BackReferenceField(
         'projects',
         widget=backref.BackReferenceBrowserWidget(
@@ -173,18 +172,18 @@ class ContactPerson(base.ATCTContent):
 
     def _computeTitle(self):
         """Get object's title."""
-        return self.getSalutation() + ' ' +\
-                self.getFirstname() + ' ' + self.getLastname()
+        return (self.getSalutation() + ' ' +
+                self.getFirstname() + ' ' +
+                self.getLastname())
 
     def _computeDescription(self):
         """ Objects Description """
         org = self.getOrganization()
-        if org==None:
+        if org is None:
             org = ''
         else:
             org = org.Title() + ', '
-        return self.getJobtitle() + ', ' +\
-            org + self.getDepartment()
+        return self.getJobtitle() + ', ' + org + self.getDepartment()
 
     def _getProjectsDirectory(self):
         """ get the path projects database """
